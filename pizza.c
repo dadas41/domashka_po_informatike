@@ -74,6 +74,10 @@ void* chef(void* param){ //повар
 			//printf("повар отнес пиццу номер %d\n", place);
 
 			pthread_cond_signal(&mn->c_del);
+
+			if (mn->cooked >= N){
+				pthread_cond_broadcast(&mn->c_chef); //будим остальных поваров если все пиццы готовы
+			}
 		}
 	
 		pthread_mutex_unlock(&mn->m);	
@@ -86,8 +90,13 @@ void* deliver(void* param){ //курьер
 	Monitor* mn = (Monitor*)param;
 	while (1){
 		pthread_mutex_lock(&mn->m);
-		while (mn->count == 0) { //если склад пока пустой - ждем
+		while (mn->count == 0 && mn->cooked < N) { //если склад пока пустой - ждем
 			pthread_cond_wait (&mn->c_del, &mn->m);
+		}
+
+		if (mn->cooked >= N) {
+			pthread_mutex_unlock(&mn->m);
+			return 0;
 		}
 		mn->count -= 1;
 
@@ -112,6 +121,7 @@ int main(){
 		strcpy(mn.kitchen[i], "xxxxx");
 	}
 	mn.count = 0;
+	mn.cooked = 0;
 	pthread_mutex_init(&mn.m, NULL);
 	pthread_cond_init(&mn.c_chef, NULL);
 	pthread_cond_init(&mn.c_del, NULL); //начальное состояние монитора
