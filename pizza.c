@@ -48,30 +48,30 @@ void* chef(void* param){ //повар
 		}
 		if (strcmp(mn->kitchen[place], "xxxxx") == 0){
 			strcpy(mn->kitchen[place], "pxxxx");
-			printf("повар добавил тесто на пиццу номер %d\n", place);
+			//printf("повар добавил тесто на пиццу номер %d\n", place);
 		}
 		else if (strcmp(mn->kitchen[place], "pxxxx") == 0){
 			strcpy(mn->kitchen[place], "pixxx");
-			printf("повар добавил начинку на пиццу номер %d\n", place);
+			//printf("повар добавил начинку на пиццу номер %d\n", place);
 		}
 		else if (strcmp(mn->kitchen[place], "pixxx") == 0){
 			strcpy(mn->kitchen[place], "pizxx");
-			printf("повар добавил соус1 на пиццу номер %d\n", place);
+			//printf("повар добавил соус1 на пиццу номер %d\n", place);
 		}
 		else if (strcmp(mn->kitchen[place], "pizxx") == 0){
 			strcpy(mn->kitchen[place], "pizzx");
-			printf("повар добавил соус2 на пиццу номер %d\n", place);
+			//printf("повар добавил соус2 на пиццу номер %d\n", place);
 		}
 		else if (strcmp(mn->kitchen[place], "pizzx") == 0){
 			strcpy(mn->kitchen[place], "pizza");
-			printf("повар испек пиццу номер %d\n", place);
+			//printf("повар испек пиццу номер %d\n", place);
 		}
 		else if (strcmp(mn->kitchen[place], "pizza") == 0){
 			strcpy(mn->storage[mn->count], mn->kitchen[place]);
 			mn->count += 1;
 			mn->cooked +=1;
 			strcpy(mn->kitchen[place], "xxxxx");
-			printf("повар отнес пиццу номер %d\n", place);
+			//printf("повар отнес пиццу номер %d\n", place);
 
 			pthread_cond_signal(&mn->c_del);
 		}
@@ -96,7 +96,7 @@ void* deliver(void* param){ //курьер
 
 		if (strcmp(box, "pizza") == 0){
 			strcpy(box, "xxxxx");
-			printf("Пицца правильная\n");
+			//printf("Пицца правильная\n");
 		}
 		pthread_cond_signal(&mn->c_chef);
 		pthread_mutex_unlock(&mn->m);
